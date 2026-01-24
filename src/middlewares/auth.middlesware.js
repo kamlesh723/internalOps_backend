@@ -5,7 +5,7 @@ const verifyToken = async(req,res, next)=>{
     try{
         const authHeader = req.headers.authorization;
 
-        if(!authHeader || !authHeader.startWith('Bearer ')){
+        if(!authHeader || !authHeader.startsWith('Bearer ')){
             return res.status(401).json({message:"No token Provided"})
         }
         const token = authHeader.split(" ")[1];
@@ -22,7 +22,7 @@ const verifyToken = async(req,res, next)=>{
         next();
 
     }catch(error){
-        return res.status(401).json({message:"Inavlid orExpired Token"})
+        return res.status(401).json({message:"Inavlid or Expired Token"})
     }
 };
 
