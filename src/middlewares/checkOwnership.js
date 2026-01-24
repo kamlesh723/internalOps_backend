@@ -1,4 +1,4 @@
-const Post = reuire("../models/Post.js")
+const Post = require("../models/Post.js")
 
 const checkPostOwnership = async (req,res,next)=>{
     try{
