@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { verifyToken, requireRole } = require("../middlewares/auth.middlesware");
-const { checkPostOwnership } = require("../middlewares/checkOwnership");
+const { checkPostOwnership } = require("../middlewares/checkPostOwnership");
 const {
     createPost,
     getAllPosts,
