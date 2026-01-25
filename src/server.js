@@ -10,6 +10,8 @@ const authRoutes = require("./routes/auth.routes")
 const postRoutes = require("./routes/post.routes")
 const userRoutes = require("./routes/user.routes")
 const commentRoutes = require("./routes/comment.routes")
+const clapRoutes = require("./routes/clap.routes")
+
 const app = express();
 
 app.use(cors());
@@ -21,6 +23,7 @@ app.use("/api/auth",authRoutes);
 app.use("/api/posts",postRoutes);
 app.use("/api/users",userRoutes);
 app.use("/api/comments",commentRoutes)
+app.use("/api/claps",clapRoutes)
 
 
 // app.use("api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
