@@ -25,19 +25,59 @@ const createPost = async(req,res)=>{
     }
 }
 
-const getAllPosts = async (req,res)=>{
-    try {
-        const posts = await Post.find({
-            isActive:true,
-            status:"published"
-        })
-        .populate("author","name email")
-        .sort({createdAt:-1});
+const getAllPosts = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
 
-        return res.json({posts})
-    } catch (error) {
-        return res.status(500).json({message:"server Error"});
+    if (page <= 0 || limit <= 0) {
+      return res.status(400).json({
+        message: "Page and limit must be positive numbers",
+      });
     }
+
+    const filter = {
+      isActive: true,
+      status: "published",
+    };
+
+    const total = await Post.countDocuments(filter);
+    const totalPages = Math.ceil(total / limit);
+
+    // 🔥 THIS is the important check
+    if (page > totalPages && totalPages !== 0) {
+      return res.status(404).json({
+        message: "Page not found",
+        pagination: {
+          requestedPage: page,
+          totalPages,
+        },
+      });
+    }
+
+    const skip = (page - 1) * limit;
+
+    const posts = await Post.find(filter)
+      .populate("author", "name email")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    return res.json({
+      posts,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalPosts: total,
+        postsPerPage: limit,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+      },
+    });
+
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
 };
 
 const getPostById = async(req,res)=>{
@@ -94,10 +134,67 @@ const deletePost = async(req,res)=>{
          return res.status(500).json({message:"Server Error"})
     }
 }
+
+const searchPosts = async(req,res)=>{
+    try {
+        const {q} = req.query;// search query and this bracket bcz of it come as object 
+        if(!q){
+            return res.status(400).json({message:"Search query required"})
+        }
+
+        const posts = await Post.find({
+            isActive:true,
+            status:"published",
+            $or:[
+               { title:{$regex:q,$options:"i"}},
+               { content:{$regex:q,$options:"i"}}
+            ]
+        })
+        .populate("author","name email")
+        .sort({createdAt:-1});
+
+        return res.json({
+            posts,
+            count:posts.length,
+            query:q
+        });
+
+    } catch (error) {
+        return res.status(500).json({message:"Server Error"})
+    }
+}
+const getMyPosts = async(req,res)=>{
+    try {
+        const posts = await Post.find({
+            auhtor:req.user,_id,
+            isActive:true
+        }).sort({createdAt:-1});// -1 mean neweast first
+        return res.json({posts});
+
+    } catch (error) {
+        return res.status(500).json({message:"Server Error"})
+    }
+}
+const getMyDrafts = async(req,res)=>{
+    try {
+        const drafts = await Post.find({
+            author:req.user._id,
+            status:"draft",
+            isActive:true
+        }).sort({createdAt:-1});
+
+        return res.json({drafts})
+    } catch (error) {
+        return res.status(500).json({message:"Server Error"})
+    }
+}
 module.exports = {
     createPost,
     getAllPosts,
     getPostById,
     updatePost,
-    deletePost
+    deletePost,
+    getMyDrafts,
+    getMyPosts,
+    searchPosts
 }

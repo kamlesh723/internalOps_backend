@@ -7,8 +7,104 @@ const {
     getAllPosts,
     getPostById,
     updatePost,
-    deletePost
+    deletePost,
+    getMyPosts,
+    getMyDrafts,
+    searchPosts
 } = require("../controller/post.controller");
+
+/**
+ * @swagger
+ * /api/posts/my-posts:
+ *   get:
+ *     summary: Get all posts created by the logged-in user
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User posts fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 posts:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Post'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+router.get("/my-posts", verifyToken, getMyPosts);
+
+/**
+ * @swagger
+ * /api/posts/my-drafts:
+ *   get:
+ *     summary: Get all draft posts created by the logged-in user
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User drafts fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 drafts:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Post'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+router.get("/my-drafts", verifyToken, getMyDrafts);
+
+/**
+ * @swagger
+ * /api/posts/search:
+ *   get:
+ *     summary: Search published posts by title or content
+ *     tags:
+ *       - Posts
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Search keyword (matched against title and content)
+ *     responses:
+ *       200:
+ *         description: Search results
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 posts:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Post'
+ *                 count:
+ *                   type: integer
+ *                   example: 3
+ *                 query:
+ *                   type: string
+ *                   example: nodejs
+ *       400:
+ *         description: Search query missing
+ *       500:
+ *         description: Server error
+ */
+router.get("/search",verifyToken, searchPosts);
 
 /**
  * @swagger
