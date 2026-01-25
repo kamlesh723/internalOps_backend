@@ -93,7 +93,7 @@ const getPostById = async(req,res)=>{
             message:"Post not found"
         })
     }
-    return res.jsn({post})
+    return res.json({post})
 }catch(error){
     return res.status(500).json({message:"server Error"});
 }

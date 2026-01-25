@@ -1,19 +1,26 @@
 const Comment = require("../models/Comment");
 
-const checkCommentOwnership = async(req,res)=>{
-    const comment = await Comment.findById(req.params.id);
+const checkCommentOwnership = async (req, res, next) => {
+  const { commentId } = req.params;
 
-    if(!comment || !comment.isActive){
-        return res.status(404).json({message:"Comment not found"})
-    }
+  const comment = await Comment.findOne({
+    _id: commentId,
+    isActive: true
+  });
 
-    if(
-        comment.author.toString()!== req.user._id.toString() && !['admin','moderator'].includes(req.user.role)
-    ){
-        return res.status(403).json({message:"forbidden"})
-    }
-    req.comment = comment;
-    next();
-}
+  if (!comment) {
+    return res.status(404).json({ message: "Comment not found" });
+  }
 
-module.exports = {checkCommentOwnership}
+  if (
+    comment.author.toString() !== req.user._id.toString() &&
+    !["admin", "moderator"].includes(req.user.role)
+  ) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+
+  req.comment = comment; 
+  next();
+};
+
+module.exports = { checkCommentOwnership };

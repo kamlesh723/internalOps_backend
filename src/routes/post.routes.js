@@ -104,7 +104,7 @@ router.get("/my-drafts", verifyToken, getMyDrafts);
  *       500:
  *         description: Server error
  */
-router.get("/search",verifyToken, searchPosts);
+router.get("/search",searchPosts);
 
 /**
  * @swagger

@@ -13,7 +13,7 @@ const createComment = async(req,res)=>{
         if(!mongoose.Types.ObjectId.isValid(postId)){
             return res.status(400).json({message:"Invalid Post ID"})
         }
-        const post = await post.findOne({
+        const post = await Post.findOne({
             _id:postId,
             isActive:true,
             status:"published"
@@ -26,7 +26,7 @@ const createComment = async(req,res)=>{
         const comment = await Comment.create({
             content:content.trim(),
             post:postId,
-            auhtor:req.user._id
+            author:req.user._id
         })
         await comment.populate("author","name email");
 
@@ -68,33 +68,22 @@ const getCommentByPost = async(req,res)=>{
         return res.status(500).json({message:"Server Error"})
     }
 }
-const deleteComment = async(req,res)=>{
-     try {
-        const {commentId} = req.params;
+const deleteComment = async (req, res) => {
+  try {
+    const comment = req.comment;
 
-         if(!mongoose.Types.ObjectId.isValid(commentId)){
-            return res.status(400).json({message:"Invalid Post ID"})
-        }
-        const comment = await Comment.findOne({
-            _id:commentId,
-            isActive:true
-        });
-        if(!comment){
-            return res.status(404).json({message:"Comment not found"})
-        }
+    comment.isActive = false;
+    comment.deletedAt = new Date();
+    comment.deletedBy = req.user._id;
 
-        comment.isActive=false;
-        comment.deletedAt=new Date();
-        comment.deletedBy = req.user._id;
-        await comment.save();
+    await comment.save();
 
-         res.json({
-            message:"comment Deleted Succesfully"
-        })
-    } catch (error) {
-        return res.status(500).json({message:"Server Error"})
-    }
-}
+    res.json({ message: "Comment deleted successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
 
 module.exports = {
     createComment,
