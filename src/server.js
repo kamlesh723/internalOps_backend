@@ -8,6 +8,7 @@ const swaggerSpec = require("./config/swagger");
 
 const authRoutes = require("./routes/auth.routes")
 const postRoutes = require("./routes/post.routes")
+const userRoutes = require("./routes/user.routes")
 
 const app = express();
 
@@ -17,7 +18,8 @@ app.use(express.json());
 connectDB();
 
 app.use("/api/auth",authRoutes);
-app.use("/api/posts",postRoutes)
+app.use("/api/posts",postRoutes);
+app.use("/api/users",userRoutes);
 
 
 // app.use("api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

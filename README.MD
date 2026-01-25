@@ -246,13 +246,10 @@ http://localhost:5000/api/docs
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
-
-This project is licensed under the MIT License.
 
 ## Author
 
-Your Name - [Your GitHub](https://github.com/yourusername)
+Your Name - [Your GitHub](https://github.com/kamlesh723)
 
 ## Acknowledgments
 
