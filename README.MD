@@ -202,86 +202,7 @@ Before you begin, ensure you have the following installed:
 
 ---
 
-## 🗄️ Database Models
 
-### User Model
-```javascript
-{
-  name: String (required),
-  email: String (required, unique),
-  password: String (required, hashed),
-  role: String (enum: ['user', 'moderator', 'admin'], default: 'user'),
-  bio: String,
-  avatar: String,
-  isActive: Boolean (default: true),
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-### Post Model
-```javascript
-{
-  title: String (required),
-  content: String (required),
-  excerpt: String,
-  author: ObjectId (ref: 'User', required),
-  status: String (enum: ['draft', 'published'], default: 'draft'),
-  tags: [ObjectId] (ref: 'Tag'),
-  coverImage: String,
-  readTime: Number,
-  isActive: Boolean (default: true),
-  deletedAt: Date,
-  deletedBy: ObjectId (ref: 'User'),
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-### Comment Model
-```javascript
-{
-  content: String (required),
-  post: ObjectId (ref: 'Post', required),
-  author: ObjectId (ref: 'User', required),
-  isActive: Boolean (default: true),
-  deletedAt: Date,
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-### Tag Model
-```javascript
-{
-  name: String (required, unique, lowercase),
-  usageCount: Number (default: 0),
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-### Clap Model
-```javascript
-{
-  post: ObjectId (ref: 'Post', required),
-  user: ObjectId (ref: 'User', required),
-  count: Number (default: 1),
-  createdAt: Date,
-  updatedAt: Date
-}
-// Unique compound index on (post, user)
-```
-
-### Follow Model
-```javascript
-{
-  follower: ObjectId (ref: 'User', required),
-  following: ObjectId (ref: 'User', required),
-  createdAt: Date,
-  updatedAt: Date
-}
-// Unique compound index on (follower, following)
 ```
 
 ---
@@ -462,10 +383,9 @@ medium-clone-backend/
 │   │   ├── followController.js   # Follow system
 │   │   └── userController.js     # User management
 │   ├── middleware/
-│   │   ├── auth.js               # JWT authentication
-│   │   ├── roleCheck.js          # Role-based access
-│   │   ├── errorHandler.js       # Error handling
-│   │   └── validate.js           # Request validation
+│   │   ├── auth.js                     # JWT authentication
+│   │   ├── CheckCommentOwnership.js    # Role-based access
+│   │   ├── CheckPostOwnership.js       # Error handling
 │   ├── models/
 │   │   ├── User.js               # User schema
 │   │   ├── Post.js               # Post schema
@@ -482,12 +402,8 @@ medium-clone-backend/
 │   │   ├── followRoutes.js       # Follow endpoints
 │   │   └── userRoutes.js         # User management endpoints
 │   ├── utils/
-│   │   ├── apiResponse.js        # Standardized responses
-│   │   └── validators.js         # Input validators
-│   └── app.js                    # Express app setup
 ├── scripts/
 │   └── seedAdmin.js              # Admin user seeding
-├── .env.example                  # Environment template
 ├── .gitignore                    # Git ignore rules
 ├── package.json                  # Dependencies
 ├── README.md                     # This file
@@ -611,15 +527,10 @@ Contributions are welcome! Please follow these steps:
 **Kamlesh Yadav**
 
 - GitHub: [@kamlesh723](https://github.com/kamlesh723)
-- Email: [your-email@example.com]
+- Email: [kamllesh.yadavv@gmail.com]
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 🙏 Acknowledgments
 
