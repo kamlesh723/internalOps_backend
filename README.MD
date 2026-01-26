@@ -13,29 +13,6 @@
 
 </div>
 
----
-
-## 📋 Table of Contents
-
-- [Overview](#-overview)
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Installation & Setup](#-installation--setup)
-- [Environment Variables](#-environment-variables)
-- [Database Models](#-database-models)
-- [API Documentation](#-api-documentation)
-- [API Endpoints](#-api-endpoints)
-- [Project Structure](#-project-structure)
-- [Security Features](#-security-features)
-- [Testing](#-testing)
-- [Deployment](#-deployment)
-- [Roadmap](#-roadmap)
-- [Contributing](#-contributing)
-- [Author](#-author)
-- [License](#-license)
-
----
-
 ## 🎯 Overview
 
 This repository represents the **completed backend** of a full-stack Medium clone project. Built with modern best practices, this API provides a robust foundation for a blogging platform with features like authentication, post management, social interactions, and administrative controls.
@@ -160,15 +137,11 @@ Before you begin, ensure you have the following installed:
    JWT_SECRET=your_super_secret_key_here_min_32_characters
    JWT_EXPIRE=7d
 
-   # Optional: For production
-   # FRONTEND_URL=http://localhost:3000
-   # RATE_LIMIT_WINDOW_MS=900000
-   # RATE_LIMIT_MAX_REQUESTS=100
    ```
 
 4. **(Optional) Seed admin user**
    ```bash
-   node scripts/seedAdmin.js
+   node src/scripts/seedAdmin.js
    ```
 
 5. **Run the server**
