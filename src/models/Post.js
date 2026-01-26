@@ -19,8 +19,14 @@ const PostSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
         default:null
-    },// want to track ho deleted
-    
+    },// want to track who deleted
+
+     tags:[
+        {
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Tag"
+        }]
+
 },{timestamps:true})
 
 module.exports = mongoose.model("Post",PostSchema)

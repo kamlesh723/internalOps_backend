@@ -183,6 +183,11 @@ router.get("/:id", getPostById);
  *                 type: string
  *                 enum: [draft, published]
  *                 example: published
+ *               tags:
+ *                 type: array
+ *                 items:
+ *                    type: string
+ *                 example: ["nodejs", "backend"]
  *     responses:
  *       201:
  *         description: Post created successfully
@@ -219,6 +224,12 @@ router.post("/", verifyToken, createPost);
  *                 type: string
  *               status:
  *                 type: string
+ *                 enum: [draft, published]
+ *               tags:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["nodejs", "backend"]
  *     responses:
  *       200:
  *         description: Post updated
@@ -228,6 +239,7 @@ router.post("/", verifyToken, createPost);
  *         description: Forbidden
  */
 router.put("/:id", verifyToken, checkPostOwnership, updatePost);
+
 
 /**
  * @swagger

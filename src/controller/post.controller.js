@@ -1,13 +1,15 @@
 const Post = require("../models/Post");
+const {processTags} = require("../controller/Tag.controller")
 
 const createPost = async(req,res)=>{
     try {
-        const {title, content, status} = req.body;
+        const {title, content, status,tags=[]} = req.body;
 
         if(!title || !content){
             return res.status(400).json({messgae:"Title and Content required"})
         }
 
+        const tagIds= await processTags(tags);
         const post  = await Post.create({
             title,
             content,
@@ -101,17 +103,21 @@ const getPostById = async(req,res)=>{
 
 const updatePost = async(req,res)=>{
     try {
-        const {title, content, status} = req.body;
+        const {title, content, status,tags} = req.body;
         const post = req.post//from checkownership middleware
 
         if(title) post.title = title;
         if(content) post.content =content;
         if(status) post.status = status;
 
+        if(tags){
+            post.tags = await processTags(tags)
+        }
+       
         await post.save();
         return res.json({
             message:"Post updated succesfully",
-            post
+            
         });
     } catch (error) {
         return res.status(500).json({message:"Server Error"})
